@@ -1,7 +1,7 @@
 from django.db import models  # noqa F401
 
 class Pokemon(models.Model):
-	title = models.CharField(verbose_name='Название покемона',max_length=200, blank=True)
+	title = models.CharField(verbose_name='Название покемона',max_length=200, null=True)
 	title_en = models.CharField(verbose_name='Название покемона на английском',max_length=200, blank=True)
 	title_jp = models.CharField(verbose_name='Название покемона на японском',max_length=200, blank=True)
 	image = models.ImageField(verbose_name='Изображение покемона',upload_to='images', null=True)
