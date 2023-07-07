@@ -1,12 +1,12 @@
 from django.db import models  # noqa F401
 
 class Pokemon(models.Model):
-	title = models.CharField(max_length=200, blank=True)
-	title_en = models.CharField(max_length=200, blank=True)
-	title_jp = models.CharField(max_length=200, blank=True)
-	image = models.ImageField(upload_to='images', null=True)
-	description = models.TextField(blank=True)
-	previous_evolution = models.ForeignKey("self", related_name='next_evolutions', on_delete=models.SET_NULL, null=True, blank=True)
+	title = models.CharField(verbose_name='Название покемона',max_length=200, blank=True)
+	title_en = models.CharField(verbose_name='Название покемона на английском',max_length=200, blank=True)
+	title_jp = models.CharField(verbose_name='Название покемона на японском',max_length=200, blank=True)
+	image = models.ImageField(verbose_name='Изображение покемона',upload_to='images', null=True)
+	description = models.TextField(verbose_name='Описание покемона', blank=True)
+	previous_evolution = models.ForeignKey("self",verbose_name='Эволюционировал из', related_name='next_evolutions', on_delete=models.SET_NULL, null=True, blank=True)
 
 
 	def __str__(self):
@@ -14,13 +14,13 @@ class Pokemon(models.Model):
 
 
 class PokemonEntity(models.Model):
-	title = models.ForeignKey(Pokemon, on_delete=models.CASCADE)
-	lat = models.FloatField(null=True)
-	lon = models.FloatField(null=True)
-	appeared_at = models.DateTimeField(null=True)
-	disappeared_at = models.DateTimeField(null=True)
-	level = models.IntegerField(null=True, blank=True)
-	health = models.IntegerField(null=True, blank=True)
-	strength = models.IntegerField(null=True, blank=True)
-	defence = models.IntegerField(null=True, blank=True)
-	stamina = models.IntegerField(null=True, blank=True)
+	title = models.ForeignKey(Pokemon,verbose_name='Название покемона', on_delete=models.CASCADE)
+	lat = models.FloatField(verbose_name='Широта',null=True)
+	lon = models.FloatField(verbose_name='Долгота',null=True)
+	appeared_at = models.DateTimeField(verbose_name='Появился в', null=True)
+	disappeared_at = models.DateTimeField(verbose_name='Исчезнет в',null=True)
+	level = models.IntegerField(verbose_name='Уровень', null=True, blank=True)
+	health = models.IntegerField(verbose_name='Здоровье', null=True, blank=True)
+	strength = models.IntegerField(verbose_name='Сила',null=True, blank=True)
+	defence = models.IntegerField(verbose_name='Зашита', null=True, blank=True)
+	stamina = models.IntegerField(verbose_name='Выносливость', null=True, blank=True)
