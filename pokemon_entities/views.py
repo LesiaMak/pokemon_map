@@ -61,15 +61,31 @@ def show_pokemon(request, pokemon_id):
     #with open('pokemon_entities/pokemons.json', encoding='utf-8') as database:
      #   pokemons = json.load(database)['pokemons']
     requested_pokemon = Pokemon.objects.get(id=int(pokemon_id))
+    pr_evev_pokemon = requested_pokemon.previous_evolution
     if requested_pokemon.id == int(pokemon_id):
-        pokemon = {
-            'pokemon_id': requested_pokemon.id,
-            'title_ru': requested_pokemon.title,
-            'title_en': requested_pokemon.title_en,
-            'title_jp': requested_pokemon.title_jp,
-            'img_url': request.build_absolute_uri(requested_pokemon.image.url),
-            'description': requested_pokemon.description, 
-            }
+        if not pr_evev_pokemon == None:
+            pokemon = {
+                'pokemon_id': requested_pokemon.id,
+                'title_ru': requested_pokemon.title,
+                'title_en': requested_pokemon.title_en,
+                'title_jp': requested_pokemon.title_jp,
+                'img_url': request.build_absolute_uri(requested_pokemon.image.url),
+                'description': requested_pokemon.description, 
+                'previous_evolution': {
+                    "title_ru": pr_evev_pokemon.title,
+                    'pokemon_id': pr_evev_pokemon.id,
+                    'img_url': request.build_absolute_uri(pr_evev_pokemon.image.url)
+                    }
+                    }
+        else:
+            pokemon = {
+                'pokemon_id': requested_pokemon.id,
+                'title_ru': requested_pokemon.title,
+                'title_en': requested_pokemon.title_en,
+                'title_jp': requested_pokemon.title_jp,
+                'img_url': request.build_absolute_uri(requested_pokemon.image.url),
+                'description': requested_pokemon.description, 
+                }
     else:
         return HttpResponseNotFound('<h1>Такой покемон не найден</h1>')
     
