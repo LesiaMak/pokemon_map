@@ -1,7 +1,7 @@
 from django.db import models  # noqa F401
 
 class Pokemon(models.Model):
-	title = models.CharField(max_length=200)
+	title = models.CharField(max_length=200, blank=True)
 	image = models.ImageField(upload_to='images', null=True)
 
 	def __str__(self):
@@ -9,5 +9,6 @@ class Pokemon(models.Model):
 
 
 class PokemonEntity(models.Model):
+	title = models.ForeignKey(Pokemon, on_delete=models.CASCADE)
 	lat = models.FloatField()
 	lon = models.FloatField()
