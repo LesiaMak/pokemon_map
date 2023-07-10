@@ -1,7 +1,7 @@
 from django.db import models  # noqa F401
 
 class Pokemon(models.Model):
-	title = models.CharField(verbose_name='Название покемона',max_length=200, null=True)
+	title = models.CharField(verbose_name='Покемон',max_length=200, null=True)
 	title_en = models.CharField(verbose_name='Название покемона на английском',max_length=200, blank=True)
 	title_jp = models.CharField(verbose_name='Название покемона на японском',max_length=200, blank=True)
 	image = models.ImageField(verbose_name='Изображение покемона',upload_to='images', null=True)
@@ -14,7 +14,7 @@ class Pokemon(models.Model):
 
 
 class PokemonEntity(models.Model):
-	title = models.ForeignKey(Pokemon,verbose_name='Название покемона', on_delete=models.CASCADE)
+	pokemon = models.ForeignKey(Pokemon,verbose_name='Покемон', on_delete=models.CASCADE)
 	lat = models.FloatField(verbose_name='Широта',null=True)
 	lon = models.FloatField(verbose_name='Долгота',null=True)
 	appeared_at = models.DateTimeField(verbose_name='Появился в', null=True)
@@ -24,3 +24,6 @@ class PokemonEntity(models.Model):
 	strength = models.IntegerField(verbose_name='Сила',null=True, blank=True)
 	defence = models.IntegerField(verbose_name='Зашита', null=True, blank=True)
 	stamina = models.IntegerField(verbose_name='Выносливость', null=True, blank=True)
+
+	def __str__(self):
+		return f'{self.pokemon.title}'
