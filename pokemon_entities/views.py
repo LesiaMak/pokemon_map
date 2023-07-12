@@ -55,55 +55,29 @@ def show_all_pokemons(request):
 
 def show_pokemon(request, pokemon_id):
     requested_pokemon = get_object_or_404(Pokemon, id=int(pokemon_id))
-    pr_evol_pokemon = requested_pokemon.previous_evolution
-    next_evol_pokemon = requested_pokemon.next_evolutions.all()
-    if pr_evol_pokemon is None and next_evol_pokemon:
-        pokemon = {
+    pr_evol_pokemon = requested_pokemon.pre_evol
+    next_evol_pokemon = requested_pokemon.next_evol.first()
+    pokemon = {
             'pokemon_id': requested_pokemon.id,
             'title_ru': requested_pokemon.title,
             'title_en': requested_pokemon.title_en,
             'title_jp': requested_pokemon.title_jp,
             'img_url': request.build_absolute_uri(requested_pokemon.image.url),
             'description': requested_pokemon.description,
-            'previous_evolution': {
-                "title_ru": pr_evol_pokemon.title,
-                'pokemon_id': pr_evol_pokemon.id,
-                'img_url': request.build_absolute_uri(pr_evol_pokemon.image.url)
-                },
-            'next_evolution': {
-                "title_ru": next_evol_pokemon[0].title,
-                'pokemon_id': next_evol_pokemon[0].id,
-                'img_url': request.build_absolute_uri(next_evol_pokemon[0].image.url)
-            },
-                }
-    elif not next_evol_pokemon:
-        pokemon = {
-            'pokemon_id': requested_pokemon.id,
-            'title_ru': requested_pokemon.title,
-            'title_en': requested_pokemon.title_en,
-            'title_jp': requested_pokemon.title_jp,
-            'img_url': request.build_absolute_uri(requested_pokemon.image.url),
-            'description': requested_pokemon.description,
-            'previous_evolution': {
-                "title_ru": pr_evol_pokemon.title,
-                'pokemon_id': pr_evol_pokemon.id,
-                'img_url': request.build_absolute_uri(pr_evol_pokemon.image.url)
-                },
-                }
-    else:
-        pokemon = {
-            'pokemon_id': requested_pokemon.id,
-            'title_ru': requested_pokemon.title,
-            'title_en': requested_pokemon.title_en,
-            'title_jp': requested_pokemon.title_jp,
-            'img_url': request.build_absolute_uri(requested_pokemon.image.url),
-            'description': requested_pokemon.description,
-            'next_evolution': {
-                "title_ru": next_evol_pokemon[0].title,
-                'pokemon_id': next_evol_pokemon[0].id,
-                'img_url': request.build_absolute_uri(next_evol_pokemon[0].image.url)
-            },
             }
+    if pr_evol_pokemon:
+        pokemon['previous_evolution'] = {
+            "title_ru": pr_evol_pokemon.title,
+            'pokemon_id': pr_evol_pokemon.id,
+            'img_url': request.build_absolute_uri(pr_evol_pokemon.image.url)
+            }
+    if next_evol_pokemon:
+        pokemon['next_evolution'] = {
+            "title_ru": next_evol_pokemon.title,
+            'pokemon_id': next_evol_pokemon.id,
+            'img_url': request.build_absolute_uri(next_evol_pokemon.image.url)
+                }
+
     pokemon_entities = PokemonEntity.objects.all()
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
     for pokemon_entity in pokemon_entities:
